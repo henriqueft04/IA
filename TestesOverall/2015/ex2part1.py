@@ -4,27 +4,23 @@ False), ("B", False)], 0.1), ("D", [("C", True)], 0,77), ("D", [("C",
 False)], 0,22), ("B", [], 0,33)]
 
 def get_ancestors(bn, var):
-    p = []
-
-    for v in bn:
-        if v[0] == var:
-            p += v[1]
-
-    if p == []:
-        return []
-
     parents = []
 
-    for x in p:
-        parents += x[0]
+    # Encontrar os pais diretos da variável
+    for v in bn:
+        if v[0] == var:
+            parents += [x[0] for x in v[1]]
 
+    # Eliminar duplicados
     parents = list(set(parents))
 
-    ancestors = parents
+    # Buscar ancestrais recursivamente
+    ancestors = parents[:]
+    for parent in parents:
+        ancestors += get_ancestors(bn, parent)
 
-    for x in parents:
-        ancestors = get_ancestors(bn, x) + ancestors
+    return list(set(ancestors))
 
-    return ancestors
 
+print(get_ancestors(bn, "D"))
     
